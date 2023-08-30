@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<script>
+  class TimeFormatted extends HTMLElement {
+
+    render() { // (1)
+      let date = new Date(this.getAttribute('datetime') || Date.now)
+
+      this.innerHTML = new Intl.DateTimeFormat("default", {
+        year: this.getAttribute('year') || undefined,
+        month: this.getAttribute('month') || undefined,
+        day: this.getAttribute('day') || undefined,
+        hour: this.getAttribute('hour') || undefined,
+        minute: this.getAttribute('minute') || undefined,
+        second: this.getAttribute('second') || undefined,
+        timeZoneName: this.getAttribute('time-zone-name') || undefined,
+      }).format(date);
+    }
+
+    connectedCallback() { // (2)
+      if (!this.rendered) {
+        this.render();
+        this.rendered = true;
+      }
+    }
+  }
+
+  customElements.define("time-formatted", TimeFormatted);
+
+  class LiveTimer extends HTMLElement {
+    render() {
+      this.date = new Date()
+      this.innerHTML = `<time-formatted datetime="${this.date}" hour="numeric" minute="numeric" second="numeric"></time-formatted>`
+    }
+
+    connectedCallback() { // (2)
+      if (!this.rendered) {
+        this.render();
+        this.rendered = true;
+      }
+      setInterval(() => this.render(), 1000);
+    }
+
+    static get observedAttributes() { // (3)
+      return ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'time-zone-name'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) { // (4)
+      this.render();
+    }
+  }
+
+  customElements.define("live-timer", LiveTimer);
+</script>
+
+<body>
+  <live-timer id="elem"></live-timer>
+</body>
+
+<script>
+  elem.addEventListener('tick', event => console.log(event.detail));
+</script>
+
+</html>
