@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "first_name": "Jhon",
+      "last_name": "Abramsonireojreoifre",
+      "cart": {
+        "products": [
+          {
+            "name": "Shirt",
+            "price": "300",
+            "sku": "SDAF2E324W2Q4"
+          }
+        ]
+      }
+    }
+  ]
+}
