@@ -1,6 +1,7 @@
+import datetime
 from typing import Literal
 
-from pydantic import BaseModel, validator, ValidationError
+from pydantic import BaseModel, validator, Field
 
 
 class Product(BaseModel):
@@ -19,6 +20,8 @@ class User(BaseModel):
     last_name: str
     role: Literal['stuff', 'client', 'admin'] = 'client'
     cart: Cart = Cart()
+    registration_date: Field(default_factory=datetime.date.today())
+    last_seen_date: datetime.date = None
 
     @validator('first_name', 'last_name')
     def name_length(cls, v, field):
